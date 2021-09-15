@@ -1,5 +1,9 @@
 #!/bin/sh
 
+if ! command -v playerctl; then
+	return 1
+fi
+
 playing=$(playerctl -a metadata --format='{{status}}:{{artist}} - {{title}}' | grep 'Playing' | sed -e "s/^Playing://")
 
 if [ -n "$playing" ]; then
