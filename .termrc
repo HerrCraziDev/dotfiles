@@ -1,0 +1,8 @@
+
+# Load personal aliases
+source "$HOME/.aliases"
+
+# Fix linker errors with gtk3
+export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0
+
+echo -e '\e[34m [termrc] Config reloaded\e[0m'

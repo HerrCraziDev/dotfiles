@@ -1,0 +1,3 @@
+#!/bin/sh
+diff --color=always -ytbB $1 $2 | grep --color=always -e "^" -iEe ".*\|.*" | less -r
+

@@ -1,0 +1,34 @@
+{
+  "useTaobaoRegistry": false,
+  "packageManager": "yarn",
+  "presets": {
+    "hc-quick-website": {
+      "useConfigFiles": true,
+      "plugins": {
+        "@vue/cli-plugin-babel": {},
+        "@vue/cli-plugin-typescript": {
+          "classComponent": true,
+          "useTsWithBabel": true
+        },
+        "@vue/cli-plugin-router": {
+          "historyMode": true
+        }
+      },
+      "cssPreprocessor": "less"
+    },
+    "quick-website-usethisone": {
+      "useConfigFiles": true,
+      "plugins": {
+        "@vue/cli-plugin-babel": {},
+        "@vue/cli-plugin-typescript": {
+          "classComponent": false,
+          "useTsWithBabel": true
+        },
+        "@vue/cli-plugin-router": {
+          "historyMode": true
+        }
+      },
+      "cssPreprocessor": "less"
+    }
+  }
+}
