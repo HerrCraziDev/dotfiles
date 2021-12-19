@@ -6,3 +6,6 @@ source "$HOME/.aliases"
 export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0
 
 echo -e '\e[34m [termrc] Config reloaded\e[0m'
+
+# Add Rust crates to path
+export PATH=$PATH:$HOME/.cargo/bin
