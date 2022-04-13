@@ -9,3 +9,8 @@ echo -e '\e[34m [termrc] Config reloaded\e[0m'
 
 # Add Rust crates to path
 #export PATH=$PATH:$HOME/.cargo/bin
+
+# Usual env vars
+export EDITOR=/usr/bin/vim
+export LANG="en_US.UTF-8"
+
