@@ -2,10 +2,10 @@
 # Load personal aliases
 source "$HOME/.aliases"
 
-# Fix linker errors with gtk3
-export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0
+# Fix linker errors with gtk3 -- removed since I nuked gtk-nocsd
+#export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0
 
 echo -e '\e[34m [termrc] Config reloaded\e[0m'
 
 # Add Rust crates to path
-export PATH=$PATH:$HOME/.cargo/bin
+#export PATH=$PATH:$HOME/.cargo/bin
