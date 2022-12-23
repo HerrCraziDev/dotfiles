@@ -13,4 +13,7 @@ echo -e '\e[34m [termrc] Config reloaded\e[0m'
 # Usual env vars
 export EDITOR=/usr/bin/vim
 export LANG="en_US.UTF-8"
+export LANGUAGE="en_US.UTF-8"
 
+# Decompress raw zlib files (.dat)
+zlibd() (printf "\x1f\x8b\x08\x00\x00\x00\x00\x00" | cat - "$@" | gzip -dc)

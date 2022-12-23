@@ -16,7 +16,7 @@ if [ -d $ZSH ]; then
 fi
 
 # Personal prompt
-export PROMPT="%F{yellow}[ %F{green}%B%n%F{yellow}@%F{cyan}%m %F{blue}%~%b %F{yellow}] %(!.%F{red}.%F{yellow})%B#%b%f "
+export PROMPT="%F{yellow}[ %F{green}%B%n%F{yellow}@%F{cyan}%m %F{blue}%~%b %F{yellow}] %(!.%F{red}.%F{yellow})%B$%b%f "
 
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
