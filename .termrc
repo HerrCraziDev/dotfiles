@@ -2,6 +2,11 @@
 # Load personal aliases
 source "$HOME/.aliases"
 
+# Load tmux aliases if found
+if [ -e $HOME/.tmux/.tmux-aliases ] ; then
+	source $HOME/.tmux/.tmux-aliases
+fi
+
 # Fix linker errors with gtk3 -- removed since I nuked gtk-nocsd
 #export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0
 
@@ -17,3 +22,13 @@ export LANGUAGE="en_US.UTF-8"
 
 # Decompress raw zlib files (.dat)
 zlibd() (printf "\x1f\x8b\x08\x00\x00\x00\x00\x00" | cat - "$@" | gzip -dc)
+
+# Run WSL-specific inits
+if [ -n WSLENV ] ; then
+printf '\e[34m [termrc] Running on WSL\e[0m\n'
+	
+	# Load SSH keychain
+	/usr/bin/keychain -q --nogui $HOME/.ssh/id_rsa
+	source $HOME/.keychain/$HOST-sh
+fi
+

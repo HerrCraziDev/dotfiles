@@ -1,0 +1,7 @@
+alias ta='tmux attach'
+alias tls='tmus ls'
+alias tnw='tmux new-window'
+alias tn='tnw'
+alias tsv='tmux split-window -v'
+alias tsh='tmux split-window -h'
+alias trn='tmux rename-window'
