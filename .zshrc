@@ -17,7 +17,7 @@ fi
 
 # Personal prompt
 if [[ -n "$SSH_CLIENT"  ||  -n "$SSH2_CLIENT" ]]; then 
-	c_host='%F{magenta}%M%f'
+	c_host='%F{99}%M%f'
 else
 	c_host='%F{cyan}%m%f'
 fi

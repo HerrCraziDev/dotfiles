@@ -24,8 +24,8 @@ export LANGUAGE="en_US.UTF-8"
 zlibd() (printf "\x1f\x8b\x08\x00\x00\x00\x00\x00" | cat - "$@" | gzip -dc)
 
 # Run WSL-specific inits
-if [ -n WSLENV ] ; then
-printf '\e[34m [termrc] Running on WSL\e[0m\n'
+if [ -n "$WSLENV" ] ; then
+	printf '\e[34m [termrc] Running on WSL\e[0m\n'
 	
 	# Load SSH keychain
 	/usr/bin/keychain -q --nogui $HOME/.ssh/id_rsa
@@ -33,6 +33,5 @@ printf '\e[34m [termrc] Running on WSL\e[0m\n'
 	
 	# Enable entr workaround for incomplete inotify support on WSL
 	export ENTR_INOTIFY_WORKAROUND=1
-
 fi
 
