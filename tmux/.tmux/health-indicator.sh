@@ -1,10 +1,10 @@
 #!/bin/bash
 
-cnormal1='colour31'
-cnormal2='white'
+cnormal1='colour24'
+cnormal2='colour255'
 cprefix='colour238'
 
-bnormal='colour31'
+bnormal='colour24'
 bprefix='colour208'
 normal='●'
 prefix='▲'
