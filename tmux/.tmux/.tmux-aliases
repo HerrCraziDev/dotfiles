@@ -1,5 +1,5 @@
 alias ta='tmux attach'
-alias tls='tmus ls'
+alias tls='tmux ls'
 alias tnw='tmux new-window'
 alias tn='tnw'
 alias tsv='tmux split-window -v'
