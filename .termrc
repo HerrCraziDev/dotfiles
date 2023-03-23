@@ -30,5 +30,9 @@ printf '\e[34m [termrc] Running on WSL\e[0m\n'
 	# Load SSH keychain
 	/usr/bin/keychain -q --nogui $HOME/.ssh/id_rsa
 	source $HOME/.keychain/$HOST-sh
+	
+	# Enable entr workaround for incomplete inotify support on WSL
+	export ENTR_INOTIFY_WORKAROUND=1
+
 fi
 
