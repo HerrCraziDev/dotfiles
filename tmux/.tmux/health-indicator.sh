@@ -1,23 +1,31 @@
 #!/bin/bash
 
-cnormal1='colour24'
-cnormal2='colour255'
+cnormal='colour255'
 cprefix='colour238'
 
 bnormal='colour24'
-bprefix='colour208'
+bprefix='colour172'
 normal='●'
 prefix='▲'
 
 if [ $1 -eq 1 ]; then
-	printf "#[fg=$cprefix,bg=$bprefix] $prefix "
+	fore=$cnormal
+	back=$bnormal
+	sym=$normal
+	text="#S"
 else
-	if [ $(($(date +%s) % 2)) -eq 0 ]; then
-		printf "#[fg=$cnormal1,bg=$bnormal] $normal "
-	else
-		printf "#[fg=$cnormal2,bg=$bnormal] $normal "
-	fi
+	fore=$cprefix
+	back=$bprefix
+	sym=$prefix
+	text="#[bold]⌥#[unbold]"
 fi
+
+if [ $(($(date +%s) % 2)) -eq 0 ]; then
+	printf "#[fg=$back,bg=$back] $sym #[fg=$fore]$text "
+else
+	printf "#[fg=$fore,bg=$back] $sym #[fg=$fore]$text "
+fi
+
 
 #printf "#[fg=white,bg=red] $(date +%N) $@"
 printf "#[fg=white]"
