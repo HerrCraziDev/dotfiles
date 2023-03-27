@@ -9,23 +9,24 @@ normal='●'
 prefix='▲'
 
 if [ $1 -eq 1 ]; then
-	fore=$cnormal
-	back=$bnormal
-	sym=$normal
-	text="#S"
-else
 	fore=$cprefix
 	back=$bprefix
 	sym=$prefix
 	text="#[bold]⌥#[unbold]"
+else
+	fore=$cnormal
+	back=$bnormal
+	sym=$normal
+	text="#S"
+
 fi
 
 if [ $(($(date +%s) % 2)) -eq 0 ]; then
-	printf "#[fg=$back,bg=$back] $sym #[fg=$fore]$text "
+	printf "#[fg=$fore,bg=$back] $sym #[fg=$fore]$text #[fg=$back]"
 else
-	printf "#[fg=$fore,bg=$back] $sym #[fg=$fore]$text "
+	printf "#[fg=$back,bg=$back] $sym #[fg=$fore]$text #[fg=$back]"
 fi
 
 
 #printf "#[fg=white,bg=red] $(date +%N) $@"
-printf "#[fg=white]"
+#printf "#[fg=white]"

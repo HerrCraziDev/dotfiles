@@ -23,6 +23,16 @@ else
 	echo "3"
 fi
 
+
+if [ -z "$from" ] ; then
+	before_start="#[fg=colour$to]"
+	before_end="#[bg=colour$to]"
+else
+	before_start="#[fg=colour$to,bg=colour$from]"
+	before_end="#[fg=colour$from,bg=colour$to]"
+fi
+
+
 case $side in
 	start)
 	case $shape in
@@ -32,7 +42,7 @@ case $side in
 		sharp | *)
 		separator="\ue0b2";;
 	esac
-	echo -e "#[fg=colour$to,bg=colour$from]$separator#[fg=white,bg=colour$to]";;
+	echo -e "$before_start$separator#[fg=white,bg=colour$to]";;
 
 	end)
 	case $shape in
@@ -42,7 +52,7 @@ case $side in
 		sharp | *)
 		separator="\ue0b0";;
 	esac
-	echo -e "#[fg=colour$from,bg=colour$to]$separator#[fg=white]";;
+	echo -e "$before_end$separator#[fg=white]";;
 esac
 
 
