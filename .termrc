@@ -29,9 +29,18 @@ if [ -n "$WSLENV" ] ; then
 	
 	# Load SSH keychain
 	/usr/bin/keychain -q --nogui $HOME/.ssh/id_rsa
-	source $HOME/.keychain/$HOST-sh
+	source "$HOME/.keychain/$HOST-sh"
 	
 	# Enable entr workaround for incomplete inotify support on WSL
 	export ENTR_INOTIFY_WORKAROUND=1
+	
+	# Connect serial console port if found
+	if [ -z "$_SERIAL_INIT" ] ; then
+		source "$HOME/.usbipd"
+		echo "Connecting serial port... (device $USB_SERIAL_HWID)"
+		usbipd.exe wsl attach --hardware-id $USB_SERIAL_HWID
+		usbipd.exe wsl list
+		export _SERIAL_INIT
+	fi
 fi
 

@@ -29,3 +29,8 @@ alias reload='source ~/.termrc'
 alias ssj="ssh -J pi@bst1.chenco.dev"
 
 #alias mc-install-plugin='echo "Installing $2";  echo "Done !"'
+
+sm() {
+	tmux new-window -n serial:$(basename ${@:-1}) sudo picocom --baud 921600 --parity n --databits 8 --stopbits 1 --flow n --escape z $@
+}
+
