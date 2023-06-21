@@ -27,3 +27,10 @@ alias ll='ls -lah --color=auto'
 alias reload='source ~/.termrc'
 
 #alias mc-install-plugin='echo "Installing $2";  echo "Done !"'
+alias cls='lxc ls -c ns4DSP' 
+alias cll='lxc ls -c ns4dD'
+alias ctop='lxc ls -c nsuMDbS'
+alias vls='lxc storage volume ls -c tnUcu chongoose'
+
+alias zfs='sudo zfs'
+alias zls='sudo zfs list'
