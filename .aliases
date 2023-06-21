@@ -16,8 +16,8 @@ alias ntopw='speedometer -rx wlp0s20f3 -tx wlp0s20f3'
 alias ntopeth='speedometer -rx enp7s0 -tx enp7s0'
 alias svc='sudo systemctl'
 alias svcup='svc start'
-alias scvdown='svc stop'
-alias scvrs='svc restart'
+alias svcdown='svc stop'
+alias svcrs='svc restart'
 alias py='python3.8'
 alias pkgi='sudo dpkg -i'
 alias scr='screen -S dev'
@@ -25,6 +25,8 @@ alias tmr='tmux attach'
 
 alias ll='ls -lah --color=auto'
 alias reload='source ~/.termrc'
+
+alias ssj="ssh -J pi@bst1.chenco.dev"
 
 #alias mc-install-plugin='echo "Installing $2";  echo "Done !"'
 alias cls='lxc ls -c ns4DSP' 
@@ -34,3 +36,8 @@ alias vls='lxc storage volume ls -c tnUcu chongoose'
 
 alias zfs='sudo zfs'
 alias zls='sudo zfs list'
+
+sm() {
+	tmux new-window -n serial:$(basename ${@:-1}) sudo picocom --baud 921600 --parity n --databits 8 --stopbits 1 --flow n --escape z $@
+}
+
