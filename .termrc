@@ -39,8 +39,13 @@ if [ -n "$WSLENV" ] ; then
 		source "$HOME/.usbipd"
 		echo "Connecting serial port... (device $USB_SERIAL_HWID)"
 		usbipd.exe wsl attach --hardware-id $USB_SERIAL_HWID
-		usbipd.exe wsl list
-		export _SERIAL_INIT
+		if [ $? -eq 0 ]; then
+			echo "Serial port connected"
+			usbipd.exe wsl list
+			export _SERIAL_INIT=1
+		else
+			echo "Unable to connect serial port (device $USB_SERIAL_HWID)"
+		fi
 	fi
 fi
 
