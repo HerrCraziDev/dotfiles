@@ -65,3 +65,7 @@ SAVEHIST=100000
 setopt autocd beep notify
 bindkey -e
 # End of lines configured by zsh-newuser-install
+
+# Disable zsh globbing error messages, leave it to the called program
+setopt +o nomatch
+

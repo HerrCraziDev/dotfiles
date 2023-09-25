@@ -7,6 +7,12 @@ if [ -e $HOME/.tmux/.tmux-aliases ] ; then
 	source $HOME/.tmux/.tmux-aliases
 fi
 
+if [ -n "$WSLENV" ] ; then
+	HRNX_TMUX_SESSIONNAME="wsl"
+else
+	HRNX_TMUX_SESSIONNAME="main"
+fi
+
 # Fix linker errors with gtk3 -- removed since I nuked gtk-nocsd
 #export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0
 
@@ -14,6 +20,11 @@ echo -e '\e[34m [termrc] Config reloaded\e[0m'
 
 # Add Rust crates to path
 #export PATH=$PATH:$HOME/.cargo/bin
+
+# Add node global modules to PATH
+if nodepath=$(npm root -g); then
+	export PATH=$PATH:$nodepath
+fi
 
 # Usual env vars
 export EDITOR=/usr/bin/vim
@@ -37,15 +48,48 @@ if [ -n "$WSLENV" ] ; then
 	# Connect serial console port if found
 	if [ -z "$_SERIAL_INIT" ] ; then
 		source "$HOME/.usbipd"
+		
+		# Connect serial console ports
 		echo "Connecting serial port... (device $USB_SERIAL_HWID)"
-		usbipd.exe wsl attach --hardware-id $USB_SERIAL_HWID
-		if [ $? -eq 0 ]; then
-			echo "Serial port connected"
-			usbipd.exe wsl list
-			export _SERIAL_INIT=1
+
+		bus_ids=$( usbipd.exe wsl list 2> /dev/null | grep "0403:6001" )
+		
+		if [ -n "$bus_ids" ] ; then
+			echo $bus_ids
+			IFS=$' \t\n'
+			bus_ids=$( tr -s ' ' <<< $bus_ids | cut -d ' ' -f1 | tr '\n' ' ' )
+			
+			for bus_id in $=bus_ids ; do
+				usbipd.exe wsl attach --busid $bus_id 2> /dev/null
+				if [ $? -eq 0 ]; then
+					echo "Serial port $bus_id connected"
+					export _SERIAL_INIT=$(($_SERIAL_INIT+1))
+				else
+					echo "Unable to connect serial port (device $USB_SERIAL_HWID, bus $bus_id)"
+				fi
+			done
+
+			usbipd.exe wsl list 2> /dev/null
 		else
-			echo "Unable to connect serial port (device $USB_SERIAL_HWID)"
+			echo "No serial port found matching device type $USB_SERIAL_HWID"
+		fi
+
+		# Configure serial logs
+		if [ ! -d $SERIAL_LOGS ] ; then
+			if mkdir -p $SERIAL_LOGS; then echo "Serial logpath created at $SERIAL_LOGS"
+			else echo "Unable to create $SERIAL_LOGS"; fi
+		else
+			echo "Serial logs will be written to $SERIAL_LOGS"
 		fi
 	fi
 fi
+
+# Automatically creates and attach a 'main' tmux session. If already created,
+# attach in a new window instead. If running from tmux, does nothing.
+if [ -z "$TMUX" ] ; then
+	#if [ tmux ls -F "#S" | grep $HRNX_TMUX_SESSIONNAME ] ; then
+		
+	tmux new-session -A -s $HRNX_TMUX_SESSIONNAME
+fi
+
 

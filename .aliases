@@ -26,7 +26,7 @@ alias tmr='tmux attach'
 alias ll='ls -lah --color=auto'
 alias reload='source ~/.termrc'
 
-alias ssj="ssh -J pi@bst1.chenco.dev"
+alias ssj="ssh -J herrcrazi@lan1.chenco.dev"
 
 #alias mc-install-plugin='echo "Installing $2";  echo "Done !"'
 alias cls='lxc ls -c ns4DSP' 
@@ -38,6 +38,6 @@ alias zfs='sudo zfs'
 alias zls='sudo zfs list'
 
 sm() {
-	tmux new-window -n serial:$(basename ${@:-1}) sudo picocom --baud 921600 --parity n --databits 8 --stopbits 1 --flow n --escape z $@
+	tmux new-window -n serial:$(basename ${@:-1}) sudo picocom --logfile $SERIAL_LOGS/serial-$(basename ${@:-1})-$(ls $SERIAL_LOGS/serial-*.log 2> /dev/null | wc -l).log --baud 921600 --parity n --databits 8 --stopbits 1 --flow n --escape z $@
 }
 
