@@ -45,6 +45,9 @@ if [ -n "$WSLENV" ] ; then
 	# Enable entr workaround for incomplete inotify support on WSL
 	export ENTR_INOTIFY_WORKAROUND=1
 	
+	# Re-init serial
+	reinit() (unset _SERIAL_INIT; reload)
+
 	# Connect serial console port if found
 	if [ -z "$_SERIAL_INIT" ] ; then
 		source "$HOME/.usbipd"
@@ -91,5 +94,11 @@ if [ -z "$TMUX" ] ; then
 		
 	tmux new-session -A -s $HRNX_TMUX_SESSIONNAME
 fi
+
+# Env for 'mgnt toolbox' (rbsh, rbcli, etc)
+export RBIP="192.168.13.203"
+export RBLOG="administrator"
+export RBPASS="administrator"
+export RBROOTPASS="ekitool"
 
 

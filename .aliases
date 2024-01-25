@@ -41,3 +41,19 @@ sm() {
 	tmux new-window -n serial:$(basename ${@:-1}) sudo picocom --logfile $SERIAL_LOGS/serial-$(basename ${@:-1})-$(ls $SERIAL_LOGS/serial-*.log 2> /dev/null | wc -l).log --baud 921600 --parity n --databits 8 --stopbits 1 --flow n --escape z $@
 }
 
+smi() {
+	tmux rename-window "serial:$(basename ${@:-1})"
+	sudo picocom --logfile $SERIAL_LOGS/serial-$(basename ${@:-1})-$(ls $SERIAL_LOGS/serial-*.log 2> /dev/null | wc -l).log --baud 921600 --parity n --databits 8 --stopbits 1 --flow n --escape z $@
+}
+
+mgnt() {
+	echo $1
+	sshpass -p administrator ssh administrator@$1
+}
+
+sumgnt() {
+	#echo root@$1
+	sshpass -p ekitool ssh root@$1 "${@:2}"
+}
+
+alias shmgnt="sshpass -p ekitool ssh"
