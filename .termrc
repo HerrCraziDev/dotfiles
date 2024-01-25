@@ -85,20 +85,19 @@ if [ -n "$WSLENV" ] ; then
 			echo "Serial logs will be written to $SERIAL_LOGS"
 		fi
 	fi
-fi
-
-# Automatically creates and attach a 'main' tmux session. If already created,
-# attach in a new window instead. If running from tmux, does nothing.
-if [ -z "$TMUX" ] ; then
-	#if [ tmux ls -F "#S" | grep $HRNX_TMUX_SESSIONNAME ] ; then
 		
-	tmux new-session -A -s $HRNX_TMUX_SESSIONNAME
+	# Automatically creates and attach a 'main' tmux session. If already created,
+	# attach in a new window instead. If running from tmux, does nothing.
+	if [ -z "$TMUX" ] ; then
+		#if [ tmux ls -F "#S" | grep $HRNX_TMUX_SESSIONNAME ] ; then
+			
+		tmux new-session -A -s $HRNX_TMUX_SESSIONNAME
+	fi
+
+	# Env for 'mgnt toolbox' (rbsh, rbcli, etc)
+	export RBIP="192.168.13.203"
+	export RBLOG="administrator"
+	export RBPASS="administrator"
+	export RBROOTPASS="ekitool"
 fi
-
-# Env for 'mgnt toolbox' (rbsh, rbcli, etc)
-export RBIP="192.168.13.203"
-export RBLOG="administrator"
-export RBPASS="administrator"
-export RBROOTPASS="ekitool"
-
 
