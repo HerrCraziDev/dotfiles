@@ -34,6 +34,9 @@ export LANGUAGE="en_US.UTF-8"
 # Decompress raw zlib files (.dat)
 zlibd() (printf "\x1f\x8b\x08\x00\x00\x00\x00\x00" | cat - "$@" | gzip -dc)
 
+# Kilroy was here ! #2
+export _KILROY_WAS_HERE=2
+
 # Run WSL-specific inits
 if [ -n "$WSLENV" ] ; then
 	printf '\e[34m [termrc] Running on WSL\e[0m\n'
@@ -75,6 +78,7 @@ if [ -n "$WSLENV" ] ; then
 			usbipd.exe wsl list 2> /dev/null
 		else
 			echo "No serial port found matching device type $USB_SERIAL_HWID"
+			export _SERIAL_INIT=0
 		fi
 
 		# Configure serial logs
@@ -89,15 +93,28 @@ if [ -n "$WSLENV" ] ; then
 	# Automatically creates and attach a 'main' tmux session. If already created,
 	# attach in a new window instead. If running from tmux, does nothing.
 	if [ -z "$TMUX" ] ; then
-		#if [ tmux ls -F "#S" | grep $HRNX_TMUX_SESSIONNAME ] ; then
+		if tmux has -t $HRNX_TMUX_SESSIONNAME ; then
+			if [ -v $VSCODE_EMBEDDED_TERM ] ; then
+				tmux new-session -t $HRNX_TMUX_SESSIONNAME -s vscode -e VSCODE_EMBEDDED_TERM=1 \; new-window -n vscode
+			else
+				tmux new-session -t $HRNX_TMUX_SESSIONNAME -s terminal \; new-window
+			fi
 			
-		tmux new-session -A -s $HRNX_TMUX_SESSIONNAME
+			echo "New terminal"
+		fi
+			
+		tmux new-session -A -s $HRNX_TMUX_SESSIONNAME -t $HRNX_TMUX_SESSIONNAME
 	fi
 
 	# Env for 'mgnt toolbox' (rbsh, rbcli, etc)
-	export RBIP="192.168.13.203"
+	export RBIP="192.168.9.203"
 	export RBLOG="administrator"
 	export RBPASS="administrator"
 	export RBROOTPASS="ekitool"
+
+	export _KILROY_WAS_HERE=3
+	
+	# Setup functions for DEY SDK envs (pm800)
+	source ~/sh/sdk-setenv.sh
 fi
 
