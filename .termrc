@@ -1,4 +1,7 @@
 
+# Pre-define 'reload' in case .aliases dont provide it
+alias reload='source ~/.termrc'
+
 # Load personal aliases
 source "$HOME/.aliases"
 
@@ -7,6 +10,7 @@ if [ -e $HOME/.tmux/.tmux-aliases ] ; then
 	source $HOME/.tmux/.tmux-aliases
 fi
 
+# Set base tmux session name
 if [ -n "$WSLENV" ] ; then
 	HRNX_TMUX_SESSIONNAME="wsl"
 else
@@ -37,6 +41,23 @@ zlibd() (printf "\x1f\x8b\x08\x00\x00\x00\x00\x00" | cat - "$@" | gzip -dc)
 # Kilroy was here ! #2
 export _KILROY_WAS_HERE=2
 
+# Make scripts executable in a dir
+fixsh () {
+	if [ -d $1 ] ; then 
+		find $1 -type f -name "*.sh" -exec chmod a+x {} \;
+		find $1 -type f -name "*.bash" -exec chmod a+x {} \;
+		find $1 -type f -name "*.zsh" -exec chmod a+x {} \;
+		find $1 -type f -name "*.lua" -exec chmod a+x {} \;
+		find $1 -type f -name "*.py" -exec chmod a+x {} \;
+		find $1 -type f -name "*.pl" -exec chmod a+x {} \;
+	fi
+}
+
+# User scripts & bins executable
+fixsh $HOME/sh
+fixsh $HOME/bin 
+
+
 # Run WSL-specific inits
 if [ -n "$WSLENV" ] ; then
 	printf '\e[34m [termrc] Running on WSL\e[0m\n'
@@ -56,9 +77,9 @@ if [ -n "$WSLENV" ] ; then
 		source "$HOME/.usbipd"
 		
 		# Connect serial console ports
-		echo "Connecting serial port... (device $USB_SERIAL_HWID)"
+		echo "Connecting serial port... (device ${USB_SERIAL_HWID:="0403:6001"})"
 
-		bus_ids=$( usbipd.exe wsl list 2> /dev/null | grep "0403:6001" )
+		bus_ids=$( usbipd.exe list 2> /dev/null | grep "$USB_SERIAL_HWID" )
 		
 		if [ -n "$bus_ids" ] ; then
 			echo $bus_ids
@@ -66,7 +87,7 @@ if [ -n "$WSLENV" ] ; then
 			bus_ids=$( tr -s ' ' <<< $bus_ids | cut -d ' ' -f1 | tr '\n' ' ' )
 			
 			for bus_id in $=bus_ids ; do
-				usbipd.exe wsl attach --busid $bus_id 2> /dev/null
+				usbipd.exe attach --wsl --busid $bus_id 2> /dev/null
 				if [ $? -eq 0 ]; then
 					echo "Serial port $bus_id connected"
 					export _SERIAL_INIT=$(($_SERIAL_INIT+1))
@@ -92,25 +113,34 @@ if [ -n "$WSLENV" ] ; then
 		
 	# Automatically creates and attach a 'main' tmux session. If already created,
 	# attach in a new window instead. If running from tmux, does nothing.
-	if [ -z "$TMUX" ] ; then
+	if [ -z "$TMUX" ] && which tmux ; then
+		# Check if this script has already created a base session, then create a new session with a new blank window for the new terminal.
+		# If a session had already been created and left detached, attach to that instead.
 		if tmux has -t $HRNX_TMUX_SESSIONNAME ; then
-			if [ -v $VSCODE_EMBEDDED_TERM ] ; then
-				tmux new-session -t $HRNX_TMUX_SESSIONNAME -s vscode -e VSCODE_EMBEDDED_TERM=1 \; new-window -n vscode
+			if [ "$VSCODE_EMBEDDED_TERM" = 1 ] ; then
+				# Running from vscode terminal 
+				count=$(tmux list-sessions -F "#S" -f "#{session_attached}" | grep vscode | wc -l)
+				tmux new-session -A -t $HRNX_TMUX_SESSIONNAME -s vscode-$(($count+1)) -e VSCODE_EMBEDDED_TERM=1 \; new-window -n vscode-$(($count+1))
 			else
-				tmux new-session -t $HRNX_TMUX_SESSIONNAME -s terminal \; new-window
+				# Running from another tab or window
+				count=$(tmux list-sessions -F "#S" -f "#{session_attached}" | grep $HRNX_TMUX_SESSIONNAME | wc -l)
+				tmux new-session -A -t $HRNX_TMUX_SESSIONNAME -s $HRNX_TMUX_SESSIONNAME-$(($count+1)) \; new-window
 			fi
-			
-			echo "New terminal"
+		else
+			# Create new base session	
+			tmux new-session -A -s $HRNX_TMUX_SESSIONNAME -t $HRNX_TMUX_SESSIONNAME
 		fi
-			
-		tmux new-session -A -s $HRNX_TMUX_SESSIONNAME -t $HRNX_TMUX_SESSIONNAME
 	fi
 
 	# Env for 'mgnt toolbox' (rbsh, rbcli, etc)
-	export RBIP="192.168.9.203"
+	export RBIP="10.102.88.203"
 	export RBLOG="administrator"
 	export RBPASS="administrator"
 	export RBROOTPASS="ekitool"
+
+	export PMCTL_SSH_IP="10.102.88.203"
+	export PMCTL_SSH_USER="root"
+	export PMCTL_SSH_PORT=2222
 
 	export _KILROY_WAS_HERE=3
 	
