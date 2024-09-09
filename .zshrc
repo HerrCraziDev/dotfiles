@@ -31,7 +31,7 @@ source "$HOME/.termrc"
 
 # The following lines were added by compinstall
 
-zstyle ':completion:*' completer _list _expand _complete _ignored _approximate _prefix
+zstyle ':completion:*' completer _expand _complete _ignored _approximate _prefix
 zstyle ':completion:*' expand prefix
 zstyle ':completion:*' file-sort name
 zstyle ':completion:*' ignore-parents parent
@@ -65,3 +65,10 @@ SAVEHIST=100000
 setopt autocd beep notify
 bindkey -e
 # End of lines configured by zsh-newuser-install
+
+# Disable zsh globbing error messages, leave it to the called program
+setopt +o nomatch
+
+# Set immediate completion
+setopt menu_complete
+
