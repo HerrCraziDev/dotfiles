@@ -17,11 +17,6 @@ else
 	HRNX_TMUX_SESSIONNAME="main"
 fi
 
-# Fix linker errors with gtk3 -- removed since I nuked gtk-nocsd
-#export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0
-
-echo -e '\e[34m [termrc] Config reloaded\e[0m'
-
 # Check if program is installed
 function chkinst {
 	command -v $1 &>/dev/null
@@ -34,7 +29,7 @@ chkinst rust && export PATH=$PATH:$HOME/.cargo/bin
 chkinst snap && export PATH=$PATH:/snap/bin
 
 # Add node global modules to PATH
-if nodepath=$(npm root -g); then
+if chkinst node && chkinst npm && nodepath=$(npm root -g); then
 	export PATH=$PATH:$nodepath
 fi
 
@@ -52,9 +47,6 @@ alias ls='ls --color=auto'
 # Decompress raw zlib files (.dat)
 zlibd() (printf "\x1f\x8b\x08\x00\x00\x00\x00\x00" | cat - "$@" | gzip -dc)
 
-# Kilroy was here ! #2
-export _KILROY_WAS_HERE=2
-
 # Make scripts executable in a dir
 fixsh () {
 	if [ -d $1 ] ; then 
@@ -70,6 +62,10 @@ fixsh () {
 # User scripts & bins executable
 fixsh $HOME/sh
 fixsh $HOME/bin 
+
+# Kilroy was here ! #2
+export _KILROY_WAS_HERE=2
+echo -e '\e[34m [termrc] Config reloaded\e[0m'
 
 
 # Run WSL-specific inits
