@@ -35,6 +35,12 @@ export EDITOR=/usr/bin/vim
 export LANG="en_US.UTF-8"
 export LANGUAGE="en_US.UTF-8"
 
+# Colors
+alias diff='diff --color=auto'
+alias grep='grep --color=auto'
+alias ip='ip -color=auto'
+alias ls='ls --color=auto'
+
 # Decompress raw zlib files (.dat)
 zlibd() (printf "\x1f\x8b\x08\x00\x00\x00\x00\x00" | cat - "$@" | gzip -dc)
 
@@ -69,6 +75,9 @@ if [ -n "$WSLENV" ] ; then
 	# Enable entr workaround for incomplete inotify support on WSL
 	export ENTR_INOTIFY_WORKAROUND=1
 	
+	# Add Ubuntu debuginfod server
+	export DEBUGINFOD_URLS="https://debuginfod.ubuntu.com"
+
 	# Re-init serial
 	reinit() (unset _SERIAL_INIT; reload)
 
