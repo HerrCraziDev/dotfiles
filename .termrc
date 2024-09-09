@@ -22,6 +22,14 @@ function chkinst {
 	command -v $1 &>/dev/null
 }
 
+# Enable SSH keyring when kwallet is unavailable
+if chkinst keychain && [ -n "$WSLENV"] || [ -n "$SSH_CLIENT" ] || [ -n "$SSH2_CLIENT" ]; then
+	# Load SSH keychain
+	keychain -q --nogui ~/.ssh/id_rsa
+	source ~/.keychain/${HOST}-sh
+	#source ~/.keychain/${HOST}-sh-gpg
+fi
+
 # Add Rust crates to path
 chkinst rust && export PATH=$PATH:$HOME/.cargo/bin
 
@@ -71,10 +79,6 @@ echo -e '\e[34m [termrc] Config reloaded\e[0m'
 # Run WSL-specific inits
 if [ -n "$WSLENV" ] ; then
 	printf '\e[34m [termrc] Running on WSL\e[0m\n'
-	
-	# Load SSH keychain
-	/usr/bin/keychain -q --nogui $HOME/.ssh/id_rsa
-	source "$HOME/.keychain/$HOST-sh"
 	
 	# Enable entr workaround for incomplete inotify support on WSL
 	export ENTR_INOTIFY_WORKAROUND=1

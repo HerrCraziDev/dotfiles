@@ -69,6 +69,6 @@ bindkey -e
 # Disable zsh globbing error messages, leave it to the called program
 setopt +o nomatch
 
-# Set immediate completion
+# Enable immediate completion (also remove '_list' from zstyle completion section above)
 setopt menu_complete
 

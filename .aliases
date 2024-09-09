@@ -58,3 +58,4 @@ sumgnt() {
 }
 
 alias shmgnt="sshpass -p ekitool ssh"
+alias sutom="cat ~/mots.txt | sed 's/[éèëê]/e/g' | sed 's/[àâä]/a/g' | sed 's/[ïî]/i/g'"
