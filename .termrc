@@ -12,8 +12,16 @@ fi
 
 echo -e '\e[34m [termrc] Config reloaded\e[0m'
 
+# Check if program is installed
+function chkinst {
+	command -v $1 &>/dev/null
+}
+
 # Add Rust crates to path
-#export PATH=$PATH:$HOME/.cargo/bin
+chkinst rust && export PATH=$PATH:$HOME/.cargo/bin
+
+# Add snap bins to PATH (fuck snap) 
+chkinst snap && export PATH=$PATH:/snap/bin
 
 # Usual env vars
 export EDITOR=/usr/bin/vim
