@@ -23,7 +23,7 @@ function chkinst {
 }
 
 # Enable SSH keyring when kwallet is unavailable
-if chkinst keychain && [ -n "$WSLENV"] || [ -n "$SSH_CLIENT" ] || [ -n "$SSH2_CLIENT" ]; then
+if chkinst keychain && [ -n "$WSLENV" ] || [ -n "$SSH_CLIENT" ] || [ -n "$SSH2_CLIENT" ]; then
 	# Load SSH keychain
 	keychain -q --nogui ~/.ssh/id_rsa
 	source ~/.keychain/${HOST}-sh
